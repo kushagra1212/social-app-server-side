@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 const {isEmail }=require('validator');
-
+//for email verification
 const userSchema=new mongoose.Schema({
     email:{
         type:String,
@@ -25,8 +25,5 @@ const userSchema=new mongoose.Schema({
         minlength:[6,'password should be of minimum length 6']
     }
 });
-
-
-
 
 module.exports=mongoose.model('User',userSchema);

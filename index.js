@@ -5,8 +5,11 @@ const bodyParser=require('body-parser');
 const cors=require('cors');
 const cookieParser=require('cookie-parser');
 const router=require('./routers/auth');
+const upload =require('./routers/upload/upload');
 const jwt=require('jsonwebtoken');
 const app=express();
+const multer =require('multer');//for  uploading img in db
+var uploads = multer({ dest: './uploads' });
 const PORT=4000;
 const dbURL=`mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 app.use(cookieParser());
@@ -19,6 +22,7 @@ console.log(process.env.DBNAME)
 app.use(express.json());
 
 app.use('/auth',router);
+app.use('/upload',upload);
 app.use('/',(req,res)=>res.send("server"));
 app.get('/verify',(req,res)=>{
    
