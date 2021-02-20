@@ -7,6 +7,8 @@ const path=require('path');
 const cookieParser=require('cookie-parser');
 const router=require('./routers/auth');
 const upload =require('./routers/upload/upload');
+const post=require('./routers/post/post');
+const users=require('./routers/users/users');
 const jwt=require('jsonwebtoken');
 const app=express();
 
@@ -27,6 +29,8 @@ app.use('/auth',router);
 
 
 app.use('/upload',upload);
+app.use('/post',post);
+app.use('/users',users);
 
 app.get('/verify',(req,res)=>{
    

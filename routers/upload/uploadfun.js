@@ -27,7 +27,7 @@ module.exports.getuser=async(req,res)=>{
 const user=await User.findById(id)
 if(user)
 {
-  console.log(user);
+
   res.status(200).send(user);
 
 }else{
@@ -42,7 +42,7 @@ res.status(404).send({msg:"NOT FOUND"})
 }
 module.exports.updateuser=async(req,res)=>{
   const {profilepic,email,username,_id,bio}=req.body;
-console.log(req.body)
+
   try{
     const user=await User.findById({_id})
     user.profilepic=profilepic;
@@ -50,14 +50,42 @@ console.log(req.body)
     user.username=username;
 
 user.bio=bio;
+  try{
     await user.save();
-    console.log(user);
-if(user) res.status(201).send(user)
-else res.status(404).send("NOT FOUND");
+    if(user) res.status(201).send(user)
+else res.status(404).send();
+  }catch(err) {
+    res.status(411).send({msg:"word Limit is 80 "});
+  }
+    
+
   }catch(err)
   {
      res.status(500).send(err);
   }
 
+}
+
+module.exports.updateusercount=async(req,res)=>{
+  const {postcount,id,followerscount,followingcount}=req.body;
+  
+  try{
+    const user=await User.findById({_id:id});
+    if(user)
+    {
+      postcount?user.postsnumber=postcount:null;
+      followerscount?user.followerscount=followerscount:null;
+      followingcount?user.followingcount=followingcount:null;
+      await user.save();
+      res.send(user);
+    }else{
+      res.status(404).send({msg:"user not found"})
+    }
+
+  }catch(err)
+  {
+    //console.log(err);
+    res.status(err)
+  }
 }
 

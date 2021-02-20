@@ -28,7 +28,7 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:''
     },
-    folowerscount:{
+    followerscount:{
         type:Number,
         default:0
     },
@@ -44,12 +44,7 @@ const userSchema=new mongoose.Schema({
     bio:{
         type:String,
         default:'',
-        maxlength:'40'
-    },
-    posts:{
-        type:Array,
-        default:[],
-        
+        maxlength:'100'
     }
 });
 
