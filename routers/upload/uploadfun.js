@@ -66,26 +66,5 @@ else res.status(404).send();
 
 }
 
-module.exports.updateusercount=async(req,res)=>{
-  const {postcount,id,followerscount,followingcount}=req.body;
-  
-  try{
-    const user=await User.findById({_id:id});
-    if(user)
-    {
-      postcount?user.postsnumber=postcount:null;
-      followerscount?user.followerscount=followerscount:null;
-      followingcount?user.followingcount=followingcount:null;
-      await user.save();
-      res.send(user);
-    }else{
-      res.status(404).send({msg:"user not found"})
-    }
 
-  }catch(err)
-  {
-    //console.log(err);
-    res.status(err)
-  }
-}
 

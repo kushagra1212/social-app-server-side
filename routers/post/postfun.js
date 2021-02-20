@@ -25,7 +25,7 @@ module.exports.getpost=async(req,res)=>{
 
  try{
     const user=await User.findById({_id:id});
-    const posts=await Post.find({username:user.username});
+    const posts=await Post.find({username:user.username}).limit(5);
        res.send(posts);
      
  }catch(err){

@@ -28,19 +28,6 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:''
     },
-    followerscount:{
-        type:Number,
-        default:0
-    },
-    followingcount:
-    {
-        type:Number,
-        default:0
-    },
-    postsnumber:{
-        type:Number,
-        default:0
-    },
     bio:{
         type:String,
         default:'',
