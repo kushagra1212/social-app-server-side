@@ -1,7 +1,8 @@
 const mongoose=require('mongoose');
 const itemSchema=mongoose.Schema({
     username:{
-type:String
+type:String,
+unique:true
     },
     followers:{
         type:Array
