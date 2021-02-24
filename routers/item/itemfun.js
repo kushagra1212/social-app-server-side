@@ -33,7 +33,7 @@ module.exports.updatefollowerandfollowing=async(req,res)=>{
            count=item.following.length;
             await item.save();
           
-   console.log(item)
+  
     }catch(err)
     {
         res.status(500).send(err);
