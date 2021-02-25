@@ -32,6 +32,11 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:'',
         maxlength:'100'
+    },
+    createdAt:
+    {
+        type:Date,
+        default:Date.now
     }
 });
 
