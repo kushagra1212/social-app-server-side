@@ -34,3 +34,17 @@ module.exports.getpost=async(req,res)=>{
  }
     
 }
+module.exports.getposts=async(req,res)=>{
+    const {username}=req.query;
+
+ try{
+    const user=await User.findOne({username:username});
+    const posts=await Post.find({username:user.username}).limit(5);
+       res.send(posts);
+     
+ }catch(err){
+     console.log(err);
+     res.status(404).send(err)
+ }
+    
+}
