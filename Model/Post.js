@@ -15,7 +15,9 @@ const postSchema=mongoose.Schema({
         type:Array
     },
     likes:{
-        type:Array
+        type:Array,
+        unique:true
+
     },
     createdAt:{
         type:Date,

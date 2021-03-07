@@ -38,13 +38,50 @@ module.exports.getposts=async(req,res)=>{
     const {username}=req.query;
 
  try{
-    const user=await User.findOne({username:username});
-    const posts=await Post.find({username:user.username}).limit(5);
-       res.send(posts);
-     
+   
+    const posts=await Post.find({username:username}).limit(5);
+    res.send(posts);
+    
  }catch(err){
      console.log(err);
-     res.status(404).send(err)
+     res.status(404).send(err);
  }
     
+}
+module.exports.updatelikes=async(req,res)=>{
+     const {username,id}=req.query;
+     try{
+         const post=await Post.findById(id);
+         if(post){
+         post.likes=[...post.likes,{"username":username}];
+         await post.save();
+         res.send(post);
+         }else{
+             res.send("post not found");
+         }
+     }catch(err)
+     {
+         console.log(err);
+         res.status(404).send(err);
+     }
+
+}
+module.exports.deletelike=async(req,res)=>{
+    const {id,username}=req.query;
+    try{
+     const post=await Post.findByIdAndUpdate(id,{$pull:{'likes':{username:username}}},(err,doc)=>{
+         if(err)
+         {
+             console.log(err);
+             res.status(404).send(err);
+         }
+         res.send(doc);
+     })
+    
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.sensd(err);
+    }
 }
