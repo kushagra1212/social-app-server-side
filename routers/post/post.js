@@ -7,5 +7,6 @@ router.post('/uploadpost',postfun.uploadpost);
 router.get('/getpost',postfun.getpost);
 router.get('/getposts',postfun.getposts);
 router.patch('/updatelikes',postfun.updatelikes);
-router.delete('/deletelike',postfun.deletelike)
+router.delete('/deletelike',postfun.deletelike);
+router.patch('/addcomment',postfun.addcomments);
 module.exports=router;

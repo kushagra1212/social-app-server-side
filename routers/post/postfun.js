@@ -85,3 +85,24 @@ module.exports.deletelike=async(req,res)=>{
         res.sensd(err);
     }
 }
+module.exports.addcomments=async(req,res)=>{
+    const {id,username,comment}=req.query;
+  
+    try{
+        const post=await Post.findById(id)
+        if(post)
+        {
+            post.comments=[...post.comments,{"username":username,"comment":comment}];
+            await post.save();
+            res.send(post);
+        }else{
+            res.status(404).send({"Error":"Post Not Found"});
+        }
+
+    }catch(err)
+    {
+        console.log(err);
+        res.status(500).send(err);
+
+    }
+}
