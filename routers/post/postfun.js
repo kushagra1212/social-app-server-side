@@ -25,7 +25,7 @@ module.exports.getpost=async(req,res)=>{
 
  try{
     const user=await User.findById({_id:id});
-    const posts=await Post.find({username:user.username}).limit(5);
+    const posts=await Post.find({username:user.username});
        res.send(posts);
      
  }catch(err){
@@ -35,11 +35,12 @@ module.exports.getpost=async(req,res)=>{
     
 }
 module.exports.getposts=async(req,res)=>{
-    const {username}=req.query;
+    const {username,limit,last}=req.query;
+    console.log(req.query)
 
  try{
    
-    const posts=await Post.find({username:username}).limit(5);
+    const posts=await Post.find({username:username}).skip(parseInt(last)).limit(parseInt(limit));
     res.send(posts);
     
  }catch(err){
