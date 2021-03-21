@@ -15,9 +15,6 @@ module.exports.uploadpost=async(req,res)=>{
       console.log(err)
       res.send({err:"error occured in the server"});
   }
-
-
-
 }
 
 module.exports.getpost=async(req,res)=>{
@@ -36,13 +33,13 @@ module.exports.getpost=async(req,res)=>{
 }
 module.exports.getposts=async(req,res)=>{
     const {username,limit,last}=req.query;
-    console.log(req.query)
-
- try{
-   
+    try{
     const posts=await Post.find({username:username}).skip(parseInt(last)).limit(parseInt(limit));
+
+    if(posts)
+   {
     res.send(posts);
-    
+   }
  }catch(err){
      console.log(err);
      res.status(404).send(err);
@@ -64,9 +61,7 @@ module.exports.updatelikes=async(req,res)=>{
      {
          console.log(err);
          res.status(404).send(err);
-     }
-
-}
+     }}
 module.exports.deletelike=async(req,res)=>{
     const {id,username}=req.query;
     try{
