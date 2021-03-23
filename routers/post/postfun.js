@@ -69,8 +69,10 @@ module.exports.deletelike=async(req,res)=>{
          if(err)
          {
              console.log(err);
+            
              res.status(404).send(err);
          }
+      
          res.send(doc);
      })
     
