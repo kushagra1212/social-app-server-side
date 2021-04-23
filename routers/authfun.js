@@ -35,18 +35,17 @@ module.exports.signup = async (req, res) => {
   }
 };
 module.exports.sign_in = async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
 
   const user = await User.findOne({ username: username });
   if (user) {
-    const hh = await bcrypt.compare(password, user.password);
+    const isYes = await bcrypt.compare(password, user.password);
 
-    if (hh) {
+    if (isYes) {
       const token = createToken(user._id);
-      const d = new Date();
+      const date = new Date();
       res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true });
-      res.send({ message: "success", success: true ,user:user});
+      res.send({ message: "success", success: true, user: user });
     } else {
       res.send({ message: "Password did't Match", success: false });
     }
@@ -66,8 +65,7 @@ module.exports.verify = (req, res) => {
   if (token) {
     jwt.verify(token, "kushagra rathore secret", (err, decored) => {
       if (!err) {
-     
-        res.send({ access: true ,id:decored.id});
+        res.send({ access: true, id: decored.id });
       } else {
         res.send({ access: false });
       }

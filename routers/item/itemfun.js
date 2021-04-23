@@ -84,6 +84,6 @@ module.exports.getitem=async(req,res)=>{
         }
     }catch(err)
     {
-        res.semd(500).send(err);
+        res.send(500).send(err);
     }
 }
