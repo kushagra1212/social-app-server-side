@@ -11,7 +11,7 @@ const post=require('./routers/post/post');
 const users=require('./routers/users/users');
 const item=require('./routers/item/item')
 const count=require('./routers/count/count');
-const jwt=require('jsonwebtoken');
+const Stories =require('./routers/Stories/Stories');
 const app=express();
 
 mongoose.set('useFindAndModify', false);
@@ -35,6 +35,7 @@ app.use('/post',post);
 app.use('/users',users);
 app.use('/item',item);
 app.use('/count',count);
+app.use('/stories',Stories);
 app.get('/verify',(req,res)=>{
    
 })
