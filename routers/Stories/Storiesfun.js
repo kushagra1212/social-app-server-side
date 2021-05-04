@@ -3,7 +3,8 @@ module.exports.uploadimage=async(req,res)=>{
     const {username}=req.body;
     try{
        const stories=new Stories({
-           username:username
+           username:username,
+           started:true
        });
        await stories.save();
        res.send(stories);
@@ -17,6 +18,7 @@ module.exports.uploadimage=async(req,res)=>{
 
 module.exports.updatestories=async(req,res)=>{
     const {_id,picture}=req.body;
+  
     try{
          const stories=await Stories.findById(_id);
          if(stories)
@@ -31,5 +33,23 @@ module.exports.updatestories=async(req,res)=>{
     {
         console.log(err);
         res.status(500).send({err:err});
+    }
+}
+module.exports.getstarted=async(req,res)=>{
+    const {username}=req.query;
+   
+    try{
+        const stories=await Stories.findOne({username:username});
+    if(stories)
+    {
+
+        res.send(stories);
+    }else
+      {
+          res.send({started:false})
+      }
+    }catch(err)
+    {
+       res.status(500).send(err);
     }
 }

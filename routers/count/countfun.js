@@ -88,7 +88,7 @@ module.exports.getpostcount=async(req,res)=>{
       const count =await Count.findOne({username:username});
       if(count)
       {
-          console.log(count)
+         
           res.send(count);
       }
 

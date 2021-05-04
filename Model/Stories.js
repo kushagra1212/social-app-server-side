@@ -12,6 +12,10 @@ const StoriesSchema=new mongoose.Schema({
         type:Date,
         default:Date.now,
         expires:3600
+    },
+    started:{
+        type:Boolean,
+        default:false
     }
 
 })
