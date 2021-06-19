@@ -34,7 +34,7 @@ module.exports.getpost=async(req,res)=>{
 module.exports.getposts=async(req,res)=>{
     const {username,limit,last}=req.query;
     try{
-    const posts=await Post.find({username:username}).skip(parseInt(last)).limit(parseInt(limit));
+    const posts=await Post.find({username:username}).sort({'createdAt':-1}).skip(parseInt(last)).limit(parseInt(limit));
 
     if(posts)
    {

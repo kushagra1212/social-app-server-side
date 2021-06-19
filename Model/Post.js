@@ -9,7 +9,7 @@ const postSchema=mongoose.Schema({
     },
     desc:{
         type:String,
-        maxlength:50
+        maxlength:300
     },
     comments:{
         type:Array
