@@ -2,6 +2,9 @@ const User =require('../../Model/user');
 
 module.exports.getuser=async(req,res)=>{
     const {username}=req.query;
+ if(username)
+ {
+         
 try{
     const user =await User.findOne({username:username});
     if(user)
@@ -15,6 +18,7 @@ try{
 {
     res.status(500).send(err);
 }
+ }
 
 
 }

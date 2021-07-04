@@ -1,11 +1,45 @@
 const Post=require('../../Model/Post'); 
 const User=require('../../Model/user')
+const firebase =require("../firebase/firebase.js");
+const axios =require('axios');
+const getImageToken=async (originalname)=>{
+   try{
+    const res=await axios.get(`https://firebasestorage.googleapis.com/v0/b/eimentum.appspot.com/o/${originalname}`);
+    if(res.data)
+    {
+       return res.data.downloadTokens;
+    }
+   }catch(err)
+   {
+     console.log(err);
+
+   }
+}
 module.exports.uploadpost=async(req,res)=>{
-  const {username,picture,desc}=req.body;
+
+if(!req.file) {
+      return  res.status(400).send("Error: No files found")
+}
+else{
+    const blob = firebase.bucket.file(req.file.originalname)
+        
+    const blobWriter = blob.createWriteStream({
+        metadata: {
+            contentType: req.file.mimetype
+        }
+    }); 
+    blobWriter.on('error', (err) => {
+        console.log(err)
+    })
+    
+    blobWriter.on('finish', async () => {
+      const token=await getImageToken(req.file.originalname);
+      
+  const {username,desc}=req.query;
   const post =new Post({
       username:username,
-      picture:picture,
-      desc:desc,
+      picture:`https://firebasestorage.googleapis.com/v0/b/eimentum.appspot.com/o/${req.file.originalname}?alt=media&token=${token}`,
+      desc:desc
     
   });
   try{
@@ -15,6 +49,13 @@ module.exports.uploadpost=async(req,res)=>{
       console.log(err)
       res.send({err:"error occured in the server"});
   }
+    })
+    
+    blobWriter.end(req.file.buffer);
+}
+
+
+
 }
 
 module.exports.getpost=async(req,res)=>{
