@@ -12,4 +12,5 @@ router.get('/getposts',postfun.getposts);
 router.patch('/updatelikes',postfun.updatelikes);
 router.delete('/deletelike',postfun.deletelike);
 router.patch('/addcomment',postfun.addcomments);
+router.delete('/deleteuserpost',postfun.deleteUserPost);
 module.exports=router;

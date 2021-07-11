@@ -1,9 +1,9 @@
 const express=require('express');
 const mongoose=require('mongoose');
 require('dotenv').config();
-const bodyParser=require('body-parser');
+
 const cors=require('cors');
-const path=require('path');
+
 const cookieParser=require('cookie-parser');
 const router=require('./routers/auth');
 const upload =require('./routers/upload/upload');
@@ -23,7 +23,8 @@ app.use(cookieParser());
 
   app.use(cors({origin:'http://localhost:3000',credentials:true}));
 
-app.use(bodyParser.json({limit:'30mb'}));
+  app.use(express.urlencoded({extended: true})); 
+  app.use(express.json());
 console.log(process.env.DBNAME)
 app.use(express.json());
 

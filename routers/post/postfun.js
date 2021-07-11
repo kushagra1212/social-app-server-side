@@ -2,6 +2,7 @@ const Post=require('../../Model/Post');
 const User=require('../../Model/user')
 const firebase =require("../firebase/firebase.js");
 const axios =require('axios');
+
 const getImageToken=async (originalname)=>{
    try{
     const res=await axios.get(`https://firebasestorage.googleapis.com/v0/b/eimentum.appspot.com/o/${originalname}`);
@@ -125,13 +126,15 @@ module.exports.deletelike=async(req,res)=>{
     }
 }
 module.exports.addcomments=async(req,res)=>{
-    const {id,username,comment}=req.query;
-  
+    const {id,username,comment,profilePicture}=req.body;
+   
     try{
         const post=await Post.findById(id)
         if(post)
-        {
-            post.comments=[...post.comments,{"username":username,"comment":comment}];
+        { 
+            let date=new Date();
+         
+            post.comments=[...post.comments,{"username":username,"comment":comment,"profilePicture":profilePicture,"date":date}];
             await post.save();
             res.send(post);
         }else{
@@ -144,4 +147,27 @@ module.exports.addcomments=async(req,res)=>{
         res.status(500).send(err);
 
     }
+}
+module.exports.deleteUserPost=(req,res)=>{
+    const {id,picture}=req.body;
+    console.log(picture);
+    const urlRef=firebase.storageRef.refFromURL(toString(picture));
+    console.log(urlRef.exits());
+    // urlRef.delete().then((err)=>{
+    //     if(!err)
+    //     {
+              
+    //         Post.findByIdAndDelete({id},(err)=>{
+    //              if(!err)
+    //                res.status(200).send("POST DLETED");
+    //              else
+    //                res.send(err);
+    //       })
+
+    //     }else{
+    //         res.send(err);
+    //     }
+    // })
+    res.send("SERVER")
+
 }
