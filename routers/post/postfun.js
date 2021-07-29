@@ -62,15 +62,20 @@ else{
 module.exports.getpost=async(req,res)=>{
     const {id}=req.query;
 
- try{
+try{
+   if(id!=undefined)
+   {
     const user=await User.findById({_id:id});
     const posts=await Post.find({username:user.username});
        res.send(posts);
+   }
      
  }catch(err){
      console.log(err);
      res.status(404).send(err)
  }
+  
+
     
 }
 module.exports.getposts=async(req,res)=>{

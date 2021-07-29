@@ -54,10 +54,12 @@ module.exports.updatefollowerandfollowing=async(req,res)=>{
 }
 module.exports.verifiesusers=async(req,res)=>{
     const {username,usernameofsender}=req.query;
- 
-    try{
+
+try{
+    if(username!=undefined && usernameofsender!=undefined)
+    {
         const item=await Item.find({username:username});
-   
+
         const found=item[0].followers.find(ele=>ele.username==usernameofsender);
         if(found)
         {
@@ -65,10 +67,13 @@ module.exports.verifiesusers=async(req,res)=>{
         }else{
             res.send({found:false})
         }
-    }catch(err)
-    {
-        res.status(500).send(err);
     }
+   
+}catch(err)
+{
+    res.status(500).send(err);
+}
+   
 
 }
 
