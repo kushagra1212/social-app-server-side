@@ -1,6 +1,6 @@
 const { response } = require('express');
-const item = require('../../Model/item');
-const Item =require('../../Model/item');
+const item = require('../../Model/itemModel');
+const Item =require('../../Model/itemModel');
 module.exports.setstart=async(req,res)=>{
     const {username}=req.body;
     try{

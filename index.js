@@ -11,11 +11,13 @@ const post=require('./routers/post/post');
 const users=require('./routers/users/users');
 const item=require('./routers/item/item')
 const count=require('./routers/count/count');
-const Stories =require('./routers/Stories/Stories');
+const StoriesRouter =require('./routers/Stories/StoriesRouter');
 const app=express();
-
+mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
-const image =require('./Model/image')
+mongoose.set('useCreateIndex', true);
+
+const image =require('./Model/imageModel')
 const PORT=4000;
 const dbURL=`mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 app.use(cookieParser());
@@ -36,7 +38,7 @@ app.use('/post',post);
 app.use('/users',users);
 app.use('/item',item);
 app.use('/count',count);
-app.use('/stories',Stories);
+app.use('/stories',StoriesRouter);
 app.get('/verify',(req,res)=>{
    
 })

@@ -1,6 +1,6 @@
-const image=require('../../Model/image');
+const image=require('../../Model/imageModel');
 const path=require('path');
-const User=require('../../Model/user');
+const User=require('../../Model/userModel');
 const firebase =require("../firebase/firebase.js");
 const axios =require('axios');
 const getImageToken=async (originalname)=>{

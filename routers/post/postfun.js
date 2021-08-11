@@ -1,5 +1,5 @@
-const Post=require('../../Model/Post'); 
-const User=require('../../Model/user')
+const Post=require('../../Model/PostModel'); 
+const User=require('../../Model/userModel')
 const firebase =require("../firebase/firebase.js");
 const axios =require('axios');
 

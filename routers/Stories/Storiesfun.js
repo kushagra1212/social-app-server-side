@@ -1,4 +1,4 @@
-const Stories =require('../../Model/Stories');
+const Stories =require('../../Model/StoriesModel');
 
 module.exports.uploadstories=async(req,res)=>{
     const {username,picture}=req.body;

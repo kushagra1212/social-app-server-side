@@ -1,5 +1,5 @@
-const  Count=require('../../Model/count');
-const Item =require('../../Model/item')
+const  Count=require('../../Model/countModel');
+const Item =require('../../Model/itemModel')
 module.exports.setcount=async(req,res)=>{
     const {username}=req.body;
     try{
