@@ -47,7 +47,7 @@ module.exports.sign_in = async (req, res) => {
       res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true });
       res.send({ message: "success", success: true, user: user });
     } else {
-      res.send({ message: "Password did't Match", success: false });
+      res.send({ message: "Password Incorrect", success: false });
     }
   } else {
     res.send({ message: "User not found please Register", succes: false });
