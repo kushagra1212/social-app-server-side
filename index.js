@@ -23,7 +23,7 @@ const dbURL=`mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vm
 app.use(cookieParser());
 
 
-  app.use(cors({origin:'http://localhost:3000',credentials:true}));
+  app.use(cors({origin:'https://kushagra1212.github.io/Eimentum/',credentials:true}));
 
   app.use(express.urlencoded({extended: true})); 
   app.use(express.json());
