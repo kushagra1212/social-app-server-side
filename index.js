@@ -1,63 +1,62 @@
-const express=require('express');
-const mongoose=require('mongoose');
-require('dotenv').config();
-const app=express();
-const cors=require('cors');
-var corsOptions = {
-  origin: 'https://kushagra1212.github.io',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
- 
-app.use(cors(corsOptions));
-const cookieParser=require('cookie-parser');
-const router=require('./routers/auth');
-const upload =require('./routers/upload/upload');
-const post=require('./routers/post/post');
-const users=require('./routers/users/users');
-const item=require('./routers/item/item')
-const count=require('./routers/count/count');
-const StoriesRouter =require('./routers/Stories/StoriesRouter');
+const express = require("express");
 
+const app = express();
+const cors = require("cors");
 
+const mongoose = require("mongoose");
+require("dotenv").config();
+const cookieParser = require("cookie-parser");
+const router = require("./routers/auth");
+const upload = require("./routers/upload/upload");
+const post = require("./routers/post/post");
+const users = require("./routers/users/users");
+const item = require("./routers/item/item");
+const count = require("./routers/count/count");
+const StoriesRouter = require("./routers/Stories/StoriesRouter");
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
+const ALLOWED_ORIGINS = [
+  'http://anotherthirdparty.com:8000',
+  'http://thirdparty.com:8000'
+];
 
-const image =require('./Model/imageModel')
-const PORT=4000;
-const dbURL=`mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
+const image = require("./Model/imageModel");
+const PORT = 4000;
+const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 app.use(cookieParser());
 
+app.use(express.urlencoded({ extended: true }));
 
-  app.use(express.urlencoded({extended: true})); 
-  app.use(express.json());
-console.log(process.env.DBNAME)
+console.log(process.env.DBNAME);
 app.use(express.json());
+app.use(
+  cors({
+    origin: "https://kushagra1212.github.io/Eimentum",
+    credentials: true,
+  })
+);
+app.use("/auth", router);
 
-app.use('/auth',router);
-
-
-app.use('/upload',upload);
-app.use('/post',post);
-app.use('/users',users);
-app.use('/item',item);
-app.use('/count',count);
-app.use('/stories',StoriesRouter);
-app.get('/verify',(req,res)=>{
-   
-})
-app.use('/',(req,res)=>{
-  
-  
-  res.send("server");});
-mongoose.connect(dbURL,{  useNewUrlParser: true , useUnifiedTopology: true },(err)=>{
-    if(err) console.log("NOT CONNECTED TO DB")
-    else{
-        console.log("CONNNETD TO DB")
-        app.listen(PORT,()=>(console.log(`running on port ${PORT}`)))
+app.use("/upload", upload);
+app.use("/post", post);
+app.use("/users", users);
+app.use("/item", item);
+app.use("/count", count);
+app.use("/stories", StoriesRouter);
+app.get("/verify", (req, res) => {});
+app.use("/", (req, res) => {
+  res.send("server");
+});
+mongoose.connect(
+  dbURL,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err) => {
+    if (err) console.log("NOT CONNECTED TO DB");
+    else {
+      console.log("CONNNETD TO DB");
+      app.listen(PORT, () => console.log(`running on port ${PORT}`));
     }
-})
-
-
-
+  }
+);
