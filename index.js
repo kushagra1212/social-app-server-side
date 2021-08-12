@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
+app.use(cors({credentials: true, origin: 'https://kushagra1212.github.io/Eimentum/'}));
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
@@ -23,7 +24,7 @@ const image = require("./Model/imageModel");
 const PORT = 4000;
 const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 
-app.options('*', cors())
+  
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
