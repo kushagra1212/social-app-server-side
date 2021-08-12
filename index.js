@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-app.use(cors({credentials: true, origin: 'https://kushagra1212.github.io/Eimentum/'}));
+app.use(cors({credentials: true, origin: 'https://kushagra1212.github.io'}));
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
