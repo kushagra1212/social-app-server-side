@@ -25,7 +25,6 @@ const dbURL=`mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vm
 app.use(cookieParser());
 
 
-  app.use(cors({origin:'https://kushagra1212.github.io',credentials:true}));
 
   app.use(express.urlencoded({extended: true})); 
   app.use(express.json());
@@ -44,7 +43,17 @@ app.use('/stories',StoriesRouter);
 app.get('/verify',(req,res)=>{
    
 })
-app.use('/',(req,res)=>res.send("server"));
+app.use('/',(req,res)=>{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true); 
+
+  res.send('cors problem fixed:)');
+  
+  
+  
+  res.send("server");});
 mongoose.connect(dbURL,{  useNewUrlParser: true , useUnifiedTopology: true },(err)=>{
     if(err) console.log("NOT CONNECTED TO DB")
     else{
