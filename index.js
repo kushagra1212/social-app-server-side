@@ -1,9 +1,14 @@
 const express=require('express');
 const mongoose=require('mongoose');
 require('dotenv').config();
-
+const app=express();
 const cors=require('cors');
-
+var corsOptions = {
+  origin: 'https://kushagra1212.github.io',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+ 
+app.use(cors(corsOptions));
 const cookieParser=require('cookie-parser');
 const router=require('./routers/auth');
 const upload =require('./routers/upload/upload');
@@ -12,7 +17,7 @@ const users=require('./routers/users/users');
 const item=require('./routers/item/item')
 const count=require('./routers/count/count');
 const StoriesRouter =require('./routers/Stories/StoriesRouter');
-const app=express();
+
 
 
 mongoose.set('useNewUrlParser', true);
@@ -23,7 +28,6 @@ const image =require('./Model/imageModel')
 const PORT=4000;
 const dbURL=`mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 app.use(cookieParser());
-
 
 
   app.use(express.urlencoded({extended: true})); 
@@ -44,13 +48,6 @@ app.get('/verify',(req,res)=>{
    
 })
 app.use('/',(req,res)=>{
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true); 
-
-  res.send('cors problem fixed:)');
-  
   
   
   res.send("server");});
