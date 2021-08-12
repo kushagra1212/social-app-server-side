@@ -28,9 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 
 console.log(process.env.DBNAME);
 app.use(express.json());
-
-
-app.use(cors())
+  
+app.use(cors({credentials: true, origin: 'https://kushagra1212.github.io/'}));
 app.use("/auth", router);
 
 app.use("/upload", upload);
