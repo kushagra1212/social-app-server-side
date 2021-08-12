@@ -17,10 +17,7 @@ const StoriesRouter = require("./routers/Stories/StoriesRouter");
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
-const ALLOWED_ORIGINS = [
-  'http://anotherthirdparty.com:8000',
-  'http://thirdparty.com:8000'
-];
+
 
 const image = require("./Model/imageModel");
 const PORT = 4000;
@@ -31,12 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 
 console.log(process.env.DBNAME);
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://kushagra1212.github.io",
-    credentials: true,
-  })
-);
+
+
+app.use(cors())
 app.use("/auth", router);
 
 app.use("/upload", upload);
