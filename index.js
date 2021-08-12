@@ -33,7 +33,7 @@ console.log(process.env.DBNAME);
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://kushagra1212.github.io/Eimentum",
+    origin: "https://kushagra1212.github.io",
     credentials: true,
   })
 );
