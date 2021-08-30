@@ -15,7 +15,7 @@ const users = require("./routers/users/users");
 const item = require("./routers/item/item");
 const count = require("./routers/count/count");
 const StoriesRouter = require("./routers/Stories/StoriesRouter");
-
+app.set('trust proxy', 1)
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
