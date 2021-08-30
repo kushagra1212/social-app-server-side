@@ -44,7 +44,7 @@ module.exports.sign_in = async (req, res) => {
     if (isYes) {
       const token = createToken(user._id);
       const date = new Date();
-      res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true,secure: process.env.NODE_ENV === "production"});
+      res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: false,secure: process.env.NODE_ENV === "production"});
       res.send({ message: "success", success: true, user: user });
     } else {
       res.send({ message: "Password Incorrect", success: false });
@@ -55,7 +55,7 @@ module.exports.sign_in = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1, httpOnly: true,secure: process.env.NODE_ENV === "production" });
+  res.cookie("jwt", "", { maxAge: 1, httpOnly: false,secure: process.env.NODE_ENV === "production" });
   res.send("Successfully Logout");
 };
 
