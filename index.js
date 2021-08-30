@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-//app.use(cors({credentials: true, origin: 'https://kushagra1212.github.io'}));
 app.use(cors({credentials: true, origin: 'https://eimentum.vercel.app'}));
+// app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");

@@ -1,10 +1,10 @@
 const User = require("../Model/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const secretJWT=process.env.secretJWT;
 const maxAge = 3 * 24 * 60 * 60;
 function createToken(id) {
-  return jwt.sign({ id }, "kushagra rathore secret", {
+  return jwt.sign({ id },toString(secretJWT), {
     expiresIn: maxAge,
   });
 }
@@ -44,7 +44,7 @@ module.exports.sign_in = async (req, res) => {
     if (isYes) {
       const token = createToken(user._id);
       const date = new Date();
-      res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true });
+      res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true,secure: process.env.NODE_ENV === "production",});
       res.send({ message: "success", success: true, user: user });
     } else {
       res.send({ message: "Password Incorrect", success: false });
@@ -63,7 +63,7 @@ module.exports.verify = (req, res) => {
   const token = req.cookies.jwt;
 
   if (token) {
-    jwt.verify(token, "kushagra rathore secret", (err, decored) => {
+    jwt.verify(token,toString(secretJWT), (err, decored) => {
       if (!err) {
         res.send({ access: true, id: decored.id });
       } else {
