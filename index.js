@@ -4,10 +4,8 @@ const app = express();
 const cors = require("cors");
 
 app.use(cors({
-  'allowedHeaders': ['sessionId', 'Content-Type'],
-  'exposedHeaders': ['sessionId'],
-  credentials: true, origin: 'https://eimentum.vercel.app'}));
-  
+credentials: true, origin: 'https://eimentum.vercel.app'}));
+app.set('trust proxy', 1)
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
@@ -18,7 +16,7 @@ const users = require("./routers/users/users");
 const item = require("./routers/item/item");
 const count = require("./routers/count/count");
 const StoriesRouter = require("./routers/Stories/StoriesRouter");
-app.set('trust proxy', 1)
+
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
