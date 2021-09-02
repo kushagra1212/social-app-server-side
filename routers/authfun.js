@@ -45,7 +45,7 @@ module.exports.sign_in = async (req, res) => {
     if (isYes) {
       const token = createToken(user._id);
 
-      return res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true,secure: process.env.NODE_ENV === "production"}).json({ message: "success", success: true, user: user });
+      return res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: false,secure: process.env.NODE_ENV === "production"}).json({ message: "success", success: true, user: user });
     } else {
       res.send({ message: "Password Incorrect", success: false });
     }
@@ -58,7 +58,7 @@ module.exports.logout = (req, res) => {
   return res
   .clearCookie("jwt")
   .status(200)
-  .json({ message: "Successfully logged out 😏 🍀" });
+  .json({ message: "Successfully logged out  🍀" });
 };
 
 module.exports.verify = (req, res) => {
