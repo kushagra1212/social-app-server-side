@@ -44,7 +44,7 @@ module.exports.sign_in = async (req, res) => {
 
     if (isYes) {
       const token = createToken(user._id);
-      const date = new Date();
+
       return res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true,secure: process.env.NODE_ENV === "production"}).json({ message: "success", success: true, user: user });
     } else {
       res.send({ message: "Password Incorrect", success: false });
