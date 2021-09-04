@@ -10,7 +10,10 @@ const app = express();
 
 
 const mongoose = require("mongoose");
-app.use(cors());
+app.use(cors({
+  credentials:true,
+  origin:'https://eimentum.vercel.app'
+}));
 const router = require("./routers/auth");
 const upload = require("./routers/upload/upload");
 const post = require("./routers/post/post");
@@ -24,13 +27,13 @@ mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
 
-const PORT =process.env.PORT ||  4000;
+const PORT =  process.env.PORT || 4000;
 const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 
 
 app.use(cookieParser());
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true,origin:'https://eimentum.vercel.app' }));
 
 app.use(express.json());
 
