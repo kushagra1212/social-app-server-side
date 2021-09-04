@@ -8,7 +8,10 @@ const app = express();
 
 
 const mongoose = require("mongoose");
-app.use(cors());
+app.use(cors({
+  credentials:true,
+  origin:'https://eimentum.vercel.app'
+}));
 
 const cookieParser = require("cookie-parser");
 const router = require("./routers/auth");
