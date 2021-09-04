@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const cookieParser = require("cookie-parser");
+const image = require("./Model/imageModel");
 
 
 const app = express();
@@ -12,8 +14,6 @@ app.use(cors({
   credentials:true,
   origin:'https://eimentum.vercel.app'
 }));
-
-const cookieParser = require("cookie-parser");
 const router = require("./routers/auth");
 const upload = require("./routers/upload/upload");
 const post = require("./routers/post/post");
@@ -26,7 +26,7 @@ mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
-const image = require("./Model/imageModel");
+
 const PORT = 4000;
 const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 
