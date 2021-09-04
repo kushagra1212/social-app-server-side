@@ -43,9 +43,9 @@ module.exports.sign_in = async (req, res) => {
     const isYes = await bcrypt.compare(password, user.password);
 
     if (isYes) {
-      const token = createToken(user._id);
+     // const token = createToken(user._id);
       const date = new Date();
-      res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: true});
+      // res.cookie("jwt", token, { maxAge: maxAge * 1000, httpOnly: false});
       res.send({ message: "success", success: true, user: user });
     } else {
       res.send({ message: "Password Incorrect", success: false });
@@ -56,22 +56,23 @@ module.exports.sign_in = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1, httpOnly: true });
+  // res.cookie("jwt", "", { maxAge: 1, httpOnly: true });
   res.send("Successfully Logout");
 };
 
 module.exports.verify = (req, res) => {
   const token = req.cookies.jwt;
 
-  if (token) {
-    jwt.verify(token,toString(secretJWT), (err, decored) => {
-      if (!err) {
-        res.send({ access: true, id: decored.id });
-      } else {
-        res.send({ access: false });
-      }
-    });
-  } else {
-    res.send({ access: false });
-  }
+  // if (token) {
+  //   jwt.verify(token,toString(secretJWT), (err, decored) => {
+  //     if (!err) {
+  //       res.send({ access: true, id: decored.id });
+  //     } else {
+  //       res.send({ access: false });
+  //     }
+  //   });
+  // } else {
+  //   res.send({ access: false });
+  // }
+  res.send({ access: false });
 };
