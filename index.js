@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 
 const app = express();
@@ -7,7 +8,7 @@ app.use(cors({
 credentials: true, origin: 'https://eimentum.vercel.app'}));
 app.set('trust proxy', 1)
 const mongoose = require("mongoose");
-require("dotenv").config();
+
 const cookieParser = require("cookie-parser");
 const router = require("./routers/auth");
 const upload = require("./routers/upload/upload");
