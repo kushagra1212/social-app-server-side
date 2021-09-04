@@ -1,11 +1,12 @@
 require("dotenv").config();
+
+const cors = require("cors");
 const express = require("express");
 
-const app = express();
-const cors = require("cors");
 
+const app = express();
 app.use(cors({
-  credentials: true, origin: 'https://eimentum.vercel.app'}));
+  credentials: true, origin: "https://eimentum.vercel.app"}));
 
 const mongoose = require("mongoose");
 
