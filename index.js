@@ -5,8 +5,7 @@ const express = require("express");
 
 
 const app = express();
-app.use(cors({
-  credentials: true, origin: "https://eimentum.vercel.app"}));
+
 
 const mongoose = require("mongoose");
 
@@ -23,7 +22,8 @@ mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
-
+app.use(cors({
+  credentials: true, origin: "https://eimentum.vercel.app"}));
 const image = require("./Model/imageModel");
 const PORT = 4000;
 const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
