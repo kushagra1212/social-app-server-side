@@ -10,10 +10,7 @@ const app = express();
 
 
 const mongoose = require("mongoose");
-app.use(cors({
-  credentials:true,
-  origin:'https://eimentum.vercel.app'
-}));
+app.use(cors());
 const router = require("./routers/auth");
 const upload = require("./routers/upload/upload");
 const post = require("./routers/post/post");
