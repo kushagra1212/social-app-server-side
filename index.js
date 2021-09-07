@@ -10,9 +10,13 @@ const app = express();
 
 
 const mongoose = require("mongoose");
+// app.use(cors({
+//   credentials:true,
+//   origin:'https://eimentum.vercel.app'
+// }));
 app.use(cors({
   credentials:true,
-  origin:'https://eimentum.vercel.app'
+  origin:process.env.ORG
 }));
 const router = require("./routers/auth");
 const upload = require("./routers/upload/upload");
@@ -36,7 +40,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true,origin:'https://eimentum.vercel.app' }));
 
 app.use(express.json());
-
+app.set("trust proxy", 1);
 app.use("/auth", router);
 
 app.use("/upload", upload);
