@@ -48,7 +48,7 @@ module.exports.sign_in = async (req, res) => {
       const date = new Date();
       res.cookie("jwt", token, { maxAge: maxAge * 1000,   secure: true,
         httpOnly: true,
-        sameSite: 'lax'}
+        sameSite: 'none' }
       );
       res.send({ message: "success", success: true, user: user });
     } else {
