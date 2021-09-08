@@ -60,7 +60,10 @@ module.exports.sign_in = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie('jwt');
+    res.cookie("jwt", " ", { maxAge:1,   secure: true,
+        httpOnly: true,
+        sameSite: 'none' }
+      );
 
   res.status(200).json('User Logged out');
  
