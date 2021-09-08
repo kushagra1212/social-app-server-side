@@ -4,7 +4,7 @@ const router=express.Router();
 const User=require('../Model/userModel');
 router.post('/signin',authfun.sign_in);
 router.post('/signup',authfun.signup);
-router.get('/logout',authfun.logout);
+router.post('/logout',authfun.logout);
 router.get('/verify',authfun.verify);
 
 module.exports=router;
