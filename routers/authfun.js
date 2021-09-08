@@ -60,7 +60,7 @@ module.exports.sign_in = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie();
+  res.clearCookie("jwt");
   res.send("Successfully Logout");
 };
 
