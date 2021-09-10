@@ -25,7 +25,7 @@ const users = require("./routers/users/users");
 const item = require("./routers/item/item");
 const count = require("./routers/count/count");
 const StoriesRouter = require("./routers/Stories/StoriesRouter");
-
+const messenger=require('./routers/messenger/mesenger');
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
@@ -49,6 +49,7 @@ app.use("/users", users);
 app.use("/item", item);
 app.use("/count", count);
 app.use("/stories", StoriesRouter);
+app.use('/messenger',messenger);
 app.get("/verify", (req, res) => {});
 app.use("/", (req, res) => {
   res.send("server");
