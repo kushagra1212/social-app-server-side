@@ -28,7 +28,7 @@ module.exports.getconversation=async(req,res)=>{
 
                 return res.status(400).send({mesage:"NO Users"});
         }
-        console.log(username);
+   
         try{
           
           const Conversations=await conversationModel.find({members:{"$in":username}});
