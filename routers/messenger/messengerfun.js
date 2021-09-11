@@ -23,7 +23,7 @@ module.exports.addconversation=async(req,res)=>{
 
 module.exports.getconversation=async(req,res)=>{
         const username=req.query.username;
-
+      
         if(!username){
 
                 return res.status(400).send({mesage:"NO Users"});
@@ -32,7 +32,7 @@ module.exports.getconversation=async(req,res)=>{
         try{
           
           const Conversations=await conversationModel.find({members:{"$in":username}});
-          console.log(Conversations);
+         
           res.send(Conversations);
 
         }catch(err){
@@ -44,7 +44,7 @@ module.exports.getconversation=async(req,res)=>{
 
 module.exports.addmessage=async(req,res)=>{
     const mess=req.body; 
- 
+  
     if(!mess){
         return res.status(400).send({mesage:"No Conversation Found !"});  
     }
@@ -64,7 +64,7 @@ module.exports.addmessage=async(req,res)=>{
 
 module.exports.getmessages=async(req,res)=>{
     const conversationID=req.params.conversationID;
-  
+
     if(!conversationID){
         return res.status(400).send({mesage:"ERROR Invalid ConversationID!"});  
     }

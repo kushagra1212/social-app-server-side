@@ -4,11 +4,9 @@ const conversationSchema=new mongoose.Schema({
         members:{
                 type:Array,
                 require:true
-        },
-        timestamps:{
-                type:Boolean,
-                default:true
         }
-});
+},  {
+        timestamps: true,
+    });
 
 module.exports =mongoose.model('conversation',conversationSchema)
