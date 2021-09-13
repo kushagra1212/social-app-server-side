@@ -1,14 +1,15 @@
 const conversationModel=require('../../Model/conversationModel');
 const messageModel=require('../../Model/messageModel');
 module.exports.addconversation=async(req,res)=>{
-   const {usernames}=req.body;
-   if(!usernames){
+   const {members}=req.body;
+  
+   if(members.length===0){
 
            return res.status(400).send({mesage:"NO Users"});
    }
    try{
       const Conversation=new conversationModel({
-              members:usernames
+              members:members
       });
 
       await Conversation.save();
