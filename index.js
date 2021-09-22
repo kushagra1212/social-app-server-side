@@ -10,10 +10,7 @@ const app = express();
 
 
 const mongoose = require("mongoose");
-// app.use(cors({
-//   credentials:true,
-//   origin:'https://eimentum.vercel.app'
-// }));
+
 app.use(cors({
   credentials:true,
   origin:process.env.ORG
