@@ -14,12 +14,12 @@ module.exports.signup = async (req, res) => {
   const { email, username, name, password } = req.body;
 
   if (!password || password.length < 6)
-    res.send({ properties: { message: "password minimum length 6" } });
+    return res.send({ properties: { message: "password minimum length 6" } });
   let pass = await bcrypt.hash(password, 10);
   try {
     const user = await User.create({ email, username, name, password: pass });
     if (user) {
-      res.send(user);
+      res.send({properties:{message:"",user:user}});
     }
   } catch (err) {
     if (err.code == 11000) {

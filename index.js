@@ -34,7 +34,7 @@ const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.
 
 app.use(cookieParser());
 
-app.use(express.urlencoded({ extended: true,origin:'https://eimentum.vercel.app' }));
+app.use(express.urlencoded({ extended: true,origin:'http://localhost:3000/' }));
 
 app.use(express.json());
 app.set("trust proxy", 1);
