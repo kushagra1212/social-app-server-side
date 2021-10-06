@@ -106,7 +106,7 @@ else res.status(404).send();
       if(user) res.status(201).send(user)
   else res.status(404).send();
     }catch(err) {
-      res.status(411).send({msg:"word Limit is 80 "});
+      res.status(411).send({msg:"Some thing went wrong"});
     }
       
   
