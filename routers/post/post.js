@@ -9,6 +9,7 @@ const upload = multer({
 router.post('/uploadpost', upload.single('file'),postfun.uploadpost);
 router.get('/getpost',postfun.getpost);
 router.get('/getposts',postfun.getposts);
+router.get('/userpost/:id',postfun.getpostbyid);
 router.patch('/updatelikes',postfun.updatelikes);
 router.delete('/deletelike',postfun.deletelike);
 router.patch('/addcomment',postfun.addcomments);
