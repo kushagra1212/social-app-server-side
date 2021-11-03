@@ -3,5 +3,5 @@ const router=express.Router();
 const usersfun =require('./usersfun');
 
 router.get('/getuser',usersfun.getuser);
-
+router.get('/getusers',usersfun.getusers);
 module.exports=router;

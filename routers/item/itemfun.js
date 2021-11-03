@@ -92,3 +92,17 @@ module.exports.getitem=async(req,res)=>{
         res.send(500).send(err);
     }
 }
+
+
+module.exports.isconnection=async(req,res)=>{
+    const {currentusername,username}=req.query;
+    try{
+        const items=await item.find({username:currentusername},{followers:{$elemMatch:{username:username}}});
+       if(items[0].followers.length>0)
+       res.send({found:true});
+       else
+       res.send({found:false});
+    }catch(err){
+        res.send(err);
+    }
+}
