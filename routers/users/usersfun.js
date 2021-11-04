@@ -26,4 +26,13 @@ module.exports.getusers=async(req,res)=>{
         res.send(err);
     }
 }
+module.exports.searchuser=async(req,res)=>{
+  const {username}=req.params;
+  try{
+    const users=await User.find({"username":{"$regex":username,"$options":"i"}});
+    res.send(users);
+  }catch(err){
+    res.send(err);
+  }
 
+}
