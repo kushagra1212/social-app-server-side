@@ -52,6 +52,22 @@ module.exports.uploadpost = async (req, res) => {
   }
 };
 
+module.exports.addpost = async(req, res) => {
+  const { username, desc, picture } = req.body;
+  console.log(req.body);
+  try {
+    const post = new Post({
+      username: username,
+      picture: picture,
+      desc: desc,
+    });
+    await post.save();
+    res.send(post);
+  } catch (err) {
+    res.send(err);
+  }
+};
+
 module.exports.getpost = async (req, res) => {
   const { id } = req.query;
 
@@ -83,19 +99,19 @@ module.exports.getposts = async (req, res) => {
   }
 };
 
-module.exports.getpostbyid=async(req,res)=>{
-    const { id } = req.params;
+module.exports.getpostbyid = async (req, res) => {
+  const { id } = req.params;
 
-    try {
-      if (id != undefined) {
-        const post = await Post.find({ _id: id });
-        res.send(post);
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(404).send(err);
+  try {
+    if (id != undefined) {
+      const post = await Post.find({ _id: id });
+      res.send(post);
     }
-}
+  } catch (err) {
+    console.log(err);
+    res.status(404).send(err);
+  }
+};
 module.exports.updatelikes = async (req, res) => {
   const { username, id } = req.query;
   try {
@@ -160,25 +176,13 @@ module.exports.addcomments = async (req, res) => {
     res.status(500).send(err);
   }
 };
-module.exports.deleteUserPost = (req, res) => {
-  const { id, picture } = req.body;
-  console.log(picture);
-  const urlRef = firebase.storageRef.refFromURL(toString(picture));
-  console.log(urlRef.exits());
-  // urlRef.delete().then((err)=>{
-  //     if(!err)
-  //     {
+module.exports.deleteUserPost = async(req, res) => {
+  const { id } = req.params;
 
-  //         Post.findByIdAndDelete({id},(err)=>{
-  //              if(!err)
-  //                res.status(200).send("POST DLETED");
-  //              else
-  //                res.send(err);
-  //       })
-
-  //     }else{
-  //         res.send(err);
-  //     }
-  // })
-  res.send("SERVER");
+  try{
+    const data=await Post.findByIdAndDelete({_id:id});
+    res.send(data);
+  }catch(err){
+    res.send(err);
+  }
 };
