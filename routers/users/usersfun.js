@@ -20,7 +20,7 @@ module.exports.getuser = async (req, res) => {
 module.exports.getusers=async(req,res)=>{
     const {limit,last}=req.query;
     try{
-        const users=await User.find().skip(parseInt(last)).limit(parseInt(limit));
+        const users=await User.find({}).skip(parseInt(last)).limit(parseInt(limit));
         res.send(users);
     }catch(err){
         res.send(err);
