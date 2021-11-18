@@ -25,31 +25,51 @@ module.exports.setstart=async(req,res)=>{
 }
 module.exports.updatefollowerandfollowing=async(req,res)=>{
     const {username,usernameofsender}=req.body;
-    let count;
+   let count;
+
     try{
         const item=await Item.findOne({username:usernameofsender});
       
-            item.following=[...item.following,{"username":username}];
-           count=item.following.length;
-            await item.save();
-          
-  
-    }catch(err)
-    {
-        res.status(500).send(err);
-    }
-    try{
+        item.following=[...item.following,{"username":username}];
+      count=item.following.length;
+        await item.save();
         const itm=await Item.findOne({username:username});
       
             itm.followers=[...itm.followers,{"username":usernameofsender}];
           
             await itm.save();
-     
+            res.send({followingcount:count});
     }catch(err)
     {
         res.status(500).send(err);
     }
-    res.send({followingcount:count});
+    
+
+}
+module.exports.removefollowerandfollowing=async (req,res)=>{
+    const {username,usernameofsender}=req.body;
+    let count;
+    const item=await Item.findOne({username:usernameofsender});
+ 
+  count=item.following.length;
+  
+    Item.updateOne({username:usernameofsender},{"$pull":{"following":{"username":username}}},{ safe: true, multi:true }, function(err, obj) {
+        if(err){
+            res.status(500).send(err);
+        }
+        Item.updateOne({username:username},{"$pull":{"followers":{"username":usernameofsender}}},{ safe: true, multi:true }, function(err, obj) {
+            if(err){
+                res.status(500).send(err);
+            }
+            res.send({followingcount:count});
+        });
+    });
+
+        
+   
+      
+    
+    
 
 }
 module.exports.verifiesusers=async(req,res)=>{
@@ -97,7 +117,7 @@ module.exports.getitem=async(req,res)=>{
 module.exports.isconnection=async(req,res)=>{
     const {currentusername,username}=req.query;
     try{
-        const items=await item.find({username:currentusername},{followers:{$elemMatch:{username:username}}});
+        const items=await item.find({username:currentusername},{"followers":{"$elemMatch":{"username":username}}});
        if(items[0].followers.length>0)
        res.send({found:true});
        else

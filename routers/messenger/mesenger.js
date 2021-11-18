@@ -6,5 +6,7 @@ const messengerfun=require('./messengerfun')
 router.post('/conversation',messengerfun.addconversation);
 router.get('/conversation',messengerfun.getconversation);
 router.post('/message',messengerfun.addmessage);
+
+router.patch('/deleteconversation',messengerfun.deleteconversation);
 router.get('/message/:conversationID',messengerfun.getmessages);
 module.exports=router;

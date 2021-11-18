@@ -4,6 +4,7 @@ const itemfun =require('./itemfun');
 
 router.post('/setstart',itemfun.setstart);
 router.patch('/updatefollowerandfollowing',itemfun.updatefollowerandfollowing);
+router.patch('/removefollowerandfollowing',itemfun.removefollowerandfollowing);
 router.get('/verifiesusers',itemfun.verifiesusers);
 router.get('/getitem',itemfun.getitem);
 router.get('/isconnection',itemfun.isconnection);

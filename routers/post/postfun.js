@@ -1,5 +1,6 @@
 const Post = require("../../Model/PostModel");
 const User = require("../../Model/userModel");
+const Items_Model=require("../../Model/itemModel")
 const firebase = require("../firebase/firebase.js");
 const axios = require("axios");
 
@@ -53,13 +54,14 @@ module.exports.uploadpost = async (req, res) => {
 };
 
 module.exports.addpost = async(req, res) => {
-  const { username, desc, picture } = req.body;
+  const { username, desc, picture,profilepic } = req.body;
   console.log(req.body);
   try {
     const post = new Post({
       username: username,
       picture: picture,
       desc: desc,
+      profilepic:profilepic
     });
     await post.save();
     res.send(post);
@@ -186,3 +188,34 @@ module.exports.deleteUserPost = async(req, res) => {
     res.send(err);
   }
 };
+
+
+module.exports.allposts=async(req,res)=>{
+  const {username,limit,last}=req.query;
+  let newArray=[];
+  try{
+
+     const item=await Items_Model.findOne({username:username});
+     const userPosts=await Post.find({username:username}).sort({ createdAt: -1 }).limit(parseInt(limit)).skip(parseInt(last));
+     
+     let followingsPost=await Promise.all(
+      item.following.map((fol)=>{
+         return (Post.find({username:fol.username}).sort({ createdAt: -1 }).limit(parseInt(limit)).skip(parseInt(last)));
+       })
+     );
+     let newArray1=[];
+     newArray=[[...userPosts],...followingsPost];
+     newArray.forEach((arr)=>{
+       arr.forEach((ele)=>{
+         newArray1.push(ele);
+       })
+     })
+     newArray1.sort((a,b)=>{
+        return (new Date(b.createdAt)-new Date(a.createdAt));
+     })
+     res.send(newArray1);
+
+  }catch(err){
+    res.send(err);
+  }
+}

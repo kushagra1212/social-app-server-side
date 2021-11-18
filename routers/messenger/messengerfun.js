@@ -42,6 +42,22 @@ module.exports.getconversation=async(req,res)=>{
 
 }
 
+module.exports.deleteconversation=async(req,res)=>{
+        const {members}=req.body;
+  
+        if(members.length===0){
+     
+                return res.status(400).send({mesage:"NO Users"});
+        }
+        try{
+          const docs=await conversationModel.deleteOne({members:members});
+          res.send(docs);
+        }catch(err){
+               res.status(404).send(err);
+     
+        }
+
+}
 
 module.exports.addmessage=async(req,res)=>{
     const mess=req.body; 
