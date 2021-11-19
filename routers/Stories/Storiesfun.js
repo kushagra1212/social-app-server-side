@@ -1,10 +1,10 @@
 const Stories =require('../../Model/StoriesModel');
 
 module.exports.uploadstories=async(req,res)=>{
-    const {username,picture}=req.body;
+    const {username,picture,profilepic}=req.body;
   try{
        const stories=new Stories({
-           username:username,picture:picture
+           username:username,picture:picture,profilepic:profilepic
        });
        await stories.save();
        res.send(stories);
