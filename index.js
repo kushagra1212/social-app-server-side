@@ -12,7 +12,7 @@ const app = express();
 const mongoose = require("mongoose");
 
 app.use(cors({
-  credentials:true,
+  credentials:true,  cors:true,
   origin:process.env.ORG
 }));
 const router = require("./routers/auth");
