@@ -28,7 +28,7 @@ mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
 
-const PORT =  process.env.PORT;
+const PORT =  process.env.PORT || 4000;
 const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.PASS}@cluster0.vmjpo.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 
 
