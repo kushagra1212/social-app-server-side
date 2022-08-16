@@ -1,4 +1,4 @@
-const User = require("../../Model/userModel");
+const User = require('../../Model/userModel');
 
 module.exports.getuser = async (req, res) => {
   const { username } = req.query;
@@ -8,7 +8,7 @@ module.exports.getuser = async (req, res) => {
       if (user) {
         res.send(user);
       } else {
-        res.status(404).send({ msg: "user not found" });
+        res.status(404).send({ msg: 'user not found' });
       }
     } catch (err) {
       res.status(500).send(err);
@@ -16,23 +16,25 @@ module.exports.getuser = async (req, res) => {
   }
 };
 
-
-module.exports.getusers=async(req,res)=>{
-    const {limit,last}=req.query;
-    try{
-        const users=await User.find({}).skip(parseInt(last)).limit(parseInt(limit));
-        res.send(users);
-    }catch(err){
-        res.send(err);
-    }
-}
-module.exports.searchuser=async(req,res)=>{
-  const {username}=req.params;
-  try{
-    const users=await User.find({"username":{"$regex":username,"$options":"i"}});
+module.exports.getusers = async (req, res) => {
+  const { limit, last } = req.query;
+  try {
+    const users = await User.find({})
+      .limit(parseInt(limit))
+      .skip(parseInt(last));
     res.send(users);
-  }catch(err){
+  } catch (err) {
     res.send(err);
   }
-
-}
+};
+module.exports.searchuser = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const users = await User.find({
+      username: { $regex: username, $options: 'i' },
+    });
+    res.send(users);
+  } catch (err) {
+    res.send(err);
+  }
+};

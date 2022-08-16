@@ -1,5 +1,4 @@
 const { response } = require("express");
-const item = require("../../Model/itemModel");
 const Item = require("../../Model/itemModel");
 module.exports.setstart = async (req, res) => {
   const { username } = req.body;
@@ -108,7 +107,7 @@ module.exports.getitem = async (req, res) => {
 module.exports.isconnection = async (req, res) => {
   const { currentusername, username } = req.query;
   try {
-    const items = await item.find(
+    const items = await Item.find(
       { username: currentusername },
       { followers: { $elemMatch: { username: username } } }
     );
