@@ -21,6 +21,9 @@ const postSchema=mongoose.Schema({
         }
 
     },
+    profilepic:{
+        type:String
+    },
     createdAt:{
         type:Date,
         default:Date.now

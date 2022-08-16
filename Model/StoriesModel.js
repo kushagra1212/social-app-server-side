@@ -8,6 +8,9 @@ const StoriesSchema=new mongoose.Schema({
     picture:{
         type:String
     },
+    profilepic:{
+        type:String
+    },
     createdAt:{
         type:Date,
         default:Date.now,

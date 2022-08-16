@@ -3,5 +3,6 @@ const router=express.Router();
 const usersfun =require('./usersfun');
 
 router.get('/getuser',usersfun.getuser);
-
+router.get('/getusers',usersfun.getusers);
+router.get('/searchuser/:username',usersfun.searchuser);
 module.exports=router;

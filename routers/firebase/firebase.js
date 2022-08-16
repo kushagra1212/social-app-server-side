@@ -1,30 +1,17 @@
-require('dotenv').config();
+
 const admin = require('firebase-admin');
 
-
-
-
-
-
 admin.initializeApp({
-    credential: admin.credential.cert({
-      "type": procees.evn.type,
-      "project_id":  procees.evn.project_id,
-      "private_key_id":  procees.evn.private_key_id,
-      "private_key":  procees.evn.private_key,
-      "client_email": procees.evn.client_email,
-      "client_id":  procees.evn.client_id,
-      "auth_uri":  procees.evn.auth_uri,
-      "token_uri": procees.evn.token_uri,
-      "auth_provider_x509_cert_url": procees.evn.auth_provider_x509_cert_url,
-      "client_x509_cert_url":  procees.evn.client_x509_cert_url,
-    }),
-    storageBucket:"eimentum.appspot.com"
-  });
+  credential: admin.credential.cert({
+    projectId: process.env.project_id,
+    clientEmail: process.env.client_email,
+    privateKey: process.env.private_key,
+  }),
+  storageBucket: `${process.env.PROJECT_ID}.appspot.com`,
+});
 
+const bucket = admin.storage().bucket();
 
-  const bucket = admin.storage().bucket();
-
-  module.exports = {
-    bucket
-  };
+module.exports = {
+  bucket,
+};

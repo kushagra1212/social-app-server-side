@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devstart": "nodemon index.js"
+    "devstart": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,17 +14,22 @@
     "nodemon": "^2.0.7"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "bcrypt": "^5.0.0",
+    "axios": "^0.21.3",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "cjs-loader": "^0.1.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.10.0",
+    "glob-parent": "^6.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.16",
+    "mpath": "^0.8.4",
     "multer": "^1.4.2",
+    "normalize-url": "^7.0.0",
+    "tar": "^6.1.11",
     "validate": "^5.1.0",
     "validator": "^13.5.2"
   }
