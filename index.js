@@ -55,7 +55,9 @@ app.use('/stories', StoriesRouter);
 app.use('/messenger', messenger);
 app.get('/verify', (req, res) => {});
 app.use('/', (req, res) => {
-  res.send('server');
+  res.send({
+    message: 'Welcome to Eimentum',
+  });
 });
 mongoose.connect(
   dbURL,
