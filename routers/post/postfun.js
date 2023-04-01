@@ -1,8 +1,9 @@
-const Post = require("../../Model/PostModel");
-const User = require("../../Model/userModel");
-const Items_Model=require("../../Model/itemModel")
-const firebase = require("../firebase/firebase.js");
-const axios = require("axios");
+const Post = require('../../Model/PostModel');
+const User = require('../../Model/userModel');
+const Items_Model = require('../../Model/itemModel');
+const firebase = require('../firebase/firebase.js');
+const axios = require('axios');
+const { getScore, getPostScore } = require('../../Utils');
 
 const getImageToken = async (originalname) => {
   try {
@@ -18,7 +19,7 @@ const getImageToken = async (originalname) => {
 };
 module.exports.uploadpost = async (req, res) => {
   if (!req.file) {
-    return res.status(400).send("Error: No files found");
+    return res.status(400).send('Error: No files found');
   } else {
     const blob = firebase.bucket.file(req.file.originalname);
 
@@ -27,11 +28,11 @@ module.exports.uploadpost = async (req, res) => {
         contentType: req.file.mimetype,
       },
     });
-    blobWriter.on("error", (err) => {
+    blobWriter.on('error', (err) => {
       console.log(err);
     });
 
-    blobWriter.on("finish", async () => {
+    blobWriter.on('finish', async () => {
       const token = await getImageToken(req.file.originalname);
 
       const { username, desc } = req.query;
@@ -45,7 +46,7 @@ module.exports.uploadpost = async (req, res) => {
         res.send(post);
       } catch (err) {
         console.log(err);
-        res.send({ err: "error occured in the server" });
+        res.send({ err: 'error occured in the server' });
       }
     });
 
@@ -53,15 +54,15 @@ module.exports.uploadpost = async (req, res) => {
   }
 };
 
-module.exports.addpost = async(req, res) => {
-  const { username, desc, picture,profilepic } = req.body;
+module.exports.addpost = async (req, res) => {
+  const { username, desc, picture, profilepic } = req.body;
   console.log(req.body);
   try {
     const post = new Post({
       username: username,
       picture: picture,
       desc: desc,
-      profilepic:profilepic
+      profilepic: profilepic,
     });
     await post.save();
     res.send(post);
@@ -123,7 +124,7 @@ module.exports.updatelikes = async (req, res) => {
       await post.save();
       res.send(post);
     } else {
-      res.send("post not found");
+      res.send('post not found');
     }
   } catch (err) {
     console.log(err);
@@ -171,51 +172,119 @@ module.exports.addcomments = async (req, res) => {
       await post.save();
       res.send(post);
     } else {
-      res.status(404).send({ Error: "Post Not Found" });
+      res.status(404).send({ Error: 'Post Not Found' });
     }
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
   }
 };
-module.exports.deleteUserPost = async(req, res) => {
+module.exports.deleteUserPost = async (req, res) => {
   const { id } = req.params;
 
-  try{
-    const data=await Post.findByIdAndDelete({_id:id});
+  try {
+    const data = await Post.findByIdAndDelete({ _id: id });
     res.send(data);
-  }catch(err){
+  } catch (err) {
     res.send(err);
   }
 };
+const findPost = async (usernames, limit, offset) => {
+  const posts = await Post.aggregate([
+    // Filter by username
+    {
+      $match: {
+        username: { $in: usernames },
+      },
+    },
+    // Add a new field that represents the score of each post
+    {
+      $addFields: {
+        score: {
+          $cond: {
+            if: {
+              $eq: [
+                {
+                  $divide: [
+                    {
+                      $subtract: [new Date(), '$createdAt'],
+                    },
+                    1000 * 60 * 60,
+                  ],
+                },
+                0,
+              ],
+            },
+            then: 0,
+            else: {
+              $multiply: [
+                {
+                  $add: [
+                    { $multiply: [{ $size: '$comments' }, 3] },
+                    {
+                      $multiply: [
+                        {
+                          $cond: {
+                            if: { $eq: ['$profilepic', ''] },
+                            then: 0,
+                            else: 1,
+                          },
+                        },
+                        5,
+                      ],
+                    },
+                    { $multiply: [{ $size: '$likes' }, 2] },
+                  ],
+                },
+                {
+                  $divide: [
+                    1,
+                    {
+                      $divide: [
+                        {
+                          $subtract: [new Date(), '$createdAt'],
+                        },
+                        1000 * 60 * 60,
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    // Sort on the score field and createdAt field in descending order
+    {
+      $sort: {
+        score: -1,
+        createdAt: -1,
+      },
+    },
 
+    // Limit and skip as needed
+    {
+      $skip: parseInt(offset),
+    },
+    {
+      $limit: parseInt(limit),
+    },
+  ]);
+  return posts;
+};
 
-module.exports.allposts=async(req,res)=>{
-  const {username,limit,last}=req.query;
-  let newArray=[];
-  try{
+module.exports.allposts = async (req, res) => {
+  const { username, limit, last } = req.query;
+  try {
+    let item = await Items_Model.findOne({ username: username });
+    item.following.push({ username: username });
+    const usernames = item.following.map((fol) => fol.username);
+    const posts = await findPost(usernames, limit, last);
 
-     const item=await Items_Model.findOne({username:username});
-     const userPosts=await Post.find({username:username}).sort({ createdAt: -1 }).limit(parseInt(limit)).skip(parseInt(last));
-     
-     let followingsPost=await Promise.all(
-      item.following.map((fol)=>{
-         return (Post.find({username:fol.username}).sort({ createdAt: -1 }).limit(parseInt(limit)).skip(parseInt(last)));
-       })
-     );
-     let newArray1=[];
-     newArray=[[...userPosts],...followingsPost];
-     newArray.forEach((arr)=>{
-       arr.forEach((ele)=>{
-         newArray1.push(ele);
-       })
-     })
-     newArray1.sort((a,b)=>{
-        return (new Date(b.createdAt)-new Date(a.createdAt));
-     })
-     res.send(newArray1);
-
-  }catch(err){
+    res.send(posts);
+  } catch (err) {
+    console.log(err);
     res.send(err);
   }
-}
+};
