@@ -91,7 +91,6 @@ module.exports.getpost = async (req, res) => {
 module.exports.getposts = async (req, res) => {
   const { username, limit, last: offset } = req.query;
 
-  console.log(username);
   try {
     const posts = await Post.aggregate([
       {
