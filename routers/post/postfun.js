@@ -56,7 +56,7 @@ module.exports.uploadpost = async (req, res) => {
 
 module.exports.addpost = async (req, res) => {
   const { username, desc, picture, profilepic } = req.body;
-  console.log(req.body);
+
   try {
     const post = new Post({
       username: username,
@@ -78,7 +78,10 @@ module.exports.getpost = async (req, res) => {
     if (id != undefined) {
       const user = await User.findById({ _id: id });
       const posts = await Post.find({ username: user.username });
+
       res.send(posts);
+    } else {
+      res.send({ message: 'no id found' });
     }
   } catch (err) {
     console.log(err);
@@ -95,6 +98,8 @@ module.exports.getposts = async (req, res) => {
 
     if (posts) {
       res.send(posts);
+    } else {
+      res.status(404).send({ message: 'no posts found' });
     }
   } catch (err) {
     console.log(err);
@@ -255,6 +260,42 @@ const findPost = async (usernames, limit, offset) => {
         },
       },
     },
+    // Unwind the comments array so that each comment is its own document
+    {
+      $unwind: '$comments',
+    },
+    // Join the users collection with the posts collection to get the user data for the comments
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'comments.username',
+        foreignField: 'username',
+        as: 'comments.user',
+      },
+    },
+    // Group the documents back by _id and push the comments array with the joined user documents
+    {
+      $group: {
+        _id: '$_id',
+        likes: { $first: '$likes' },
+        username: { $first: '$username' },
+        picture: { $first: '$picture' },
+        desc: { $first: '$desc' },
+        profilepic: { $first: '$profilepic' },
+        createdAt: { $first: '$createdAt' },
+        __v: { $first: '$__v' },
+        score: { $first: '$score' },
+
+        comments: {
+          $push: {
+            $mergeObjects: [
+              '$comments',
+              { user: { $arrayElemAt: ['$comments.user', 0] } },
+            ],
+          },
+        },
+      },
+    },
     // Sort on the score field and createdAt field in descending order
     {
       $sort: {
@@ -281,7 +322,6 @@ module.exports.allposts = async (req, res) => {
     item.following.push({ username: username });
     const usernames = item.following.map((fol) => fol.username);
     const posts = await findPost(usernames, limit, last);
-
     res.send(posts);
   } catch (err) {
     console.log(err);
