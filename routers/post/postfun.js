@@ -99,9 +99,13 @@ module.exports.getposts = async (req, res) => {
       },
       // Unwind the comments array so that each comment is its own document
       {
-        $unwind: '$comments',
+        $unwind: {
+          path: '$comments',
+          preserveNullAndEmptyArrays: true,
+        },
       },
       // Join the users collection with the posts collection to get the user data for the comments
+
       {
         $lookup: {
           from: 'users',
@@ -121,7 +125,6 @@ module.exports.getposts = async (req, res) => {
           profilepic: { $first: '$profilepic' },
           createdAt: { $first: '$createdAt' },
           __v: { $first: '$__v' },
-          score: { $first: '$score' },
 
           comments: {
             $push: {
@@ -148,7 +151,6 @@ module.exports.getposts = async (req, res) => {
         $limit: parseInt(limit),
       },
     ]);
-
     if (posts) {
       res.send(posts);
     } else {
@@ -315,7 +317,10 @@ const findPost = async (usernames, limit, offset) => {
     },
     // Unwind the comments array so that each comment is its own document
     {
-      $unwind: '$comments',
+      $unwind: {
+        path: '$comments',
+        preserveNullAndEmptyArrays: true,
+      },
     },
     // Join the users collection with the posts collection to get the user data for the comments
     {
@@ -326,6 +331,7 @@ const findPost = async (usernames, limit, offset) => {
         as: 'comments.user',
       },
     },
+
     // Group the documents back by _id and push the comments array with the joined user documents
     {
       $group: {
