@@ -43,21 +43,23 @@ module.exports.suggestuser = async (req, res) => {
   const { username } = req.params;
   if (!username) return res.send([]);
   try {
-    let item = await Items_Model.findOne({ username: username });
-    const suggestUser = await User.aggregate([
+    const followingUsers = await Items_Model.aggregate([
       {
         $match: {
-          username: {
-            $not: {
-              $in: item.following,
-            },
-          },
+          username: username,
         },
       },
       {
-        $limit: 5,
+        $project: {
+          following: 1,
+        },
       },
     ]);
+    let following = followingUsers[0].following.map((user) => user.username);
+    following.push(username);
+    const suggestUser = await User.find({
+      username: { $nin: following },
+    }).limit(6);
     res.send(suggestUser);
   } catch (err) {
     console.log(err);
