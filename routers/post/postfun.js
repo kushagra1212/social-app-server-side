@@ -90,6 +90,8 @@ module.exports.getpost = async (req, res) => {
 };
 module.exports.getposts = async (req, res) => {
   const { username, limit, last: offset } = req.query;
+
+  console.log(username);
   try {
     const posts = await Post.aggregate([
       {
@@ -151,6 +153,7 @@ module.exports.getposts = async (req, res) => {
         $limit: parseInt(limit),
       },
     ]);
+    console.log(posts.length);
     if (posts) {
       res.send(posts);
     } else {
