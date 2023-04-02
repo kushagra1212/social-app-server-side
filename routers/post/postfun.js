@@ -75,7 +75,7 @@ module.exports.getpost = async (req, res) => {
   const { id } = req.query;
 
   try {
-    if (id != undefined) {
+    if (id) {
       const user = await User.findById({ _id: id });
       const posts = await Post.find({ username: user.username });
 
@@ -89,12 +89,65 @@ module.exports.getpost = async (req, res) => {
   }
 };
 module.exports.getposts = async (req, res) => {
-  const { username, limit, last } = req.query;
+  const { username, limit, last: offset } = req.query;
   try {
-    const posts = await Post.find({ username: username })
-      .sort({ createdAt: -1 })
-      .skip(parseInt(last))
-      .limit(parseInt(limit));
+    const posts = await Post.aggregate([
+      {
+        $match: {
+          username: username,
+        },
+      },
+      // Unwind the comments array so that each comment is its own document
+      {
+        $unwind: '$comments',
+      },
+      // Join the users collection with the posts collection to get the user data for the comments
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'comments.username',
+          foreignField: 'username',
+          as: 'comments.user',
+        },
+      },
+      // Group the documents back by _id and push the comments array with the joined user documents
+      {
+        $group: {
+          _id: '$_id',
+          likes: { $first: '$likes' },
+          username: { $first: '$username' },
+          picture: { $first: '$picture' },
+          desc: { $first: '$desc' },
+          profilepic: { $first: '$profilepic' },
+          createdAt: { $first: '$createdAt' },
+          __v: { $first: '$__v' },
+          score: { $first: '$score' },
+
+          comments: {
+            $push: {
+              $mergeObjects: [
+                '$comments',
+                { user: { $arrayElemAt: ['$comments.user', 0] } },
+              ],
+            },
+          },
+        },
+      },
+      // Sort on the score field and createdAt field in descending order
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+
+      // Limit and skip as needed
+      {
+        $skip: parseInt(offset),
+      },
+      {
+        $limit: parseInt(limit),
+      },
+    ]);
 
     if (posts) {
       res.send(posts);
