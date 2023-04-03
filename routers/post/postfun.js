@@ -115,6 +115,14 @@ module.exports.getposts = async (req, res) => {
           as: 'comments.user',
         },
       },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'username',
+          foreignField: 'username',
+          as: 'user',
+        },
+      },
       // Group the documents back by _id and push the comments array with the joined user documents
       {
         $group: {
@@ -123,7 +131,7 @@ module.exports.getposts = async (req, res) => {
           username: { $first: '$username' },
           picture: { $first: '$picture' },
           desc: { $first: '$desc' },
-          profilepic: { $first: '$profilepic' },
+          profilepic: { $first: '$user.profilepic' },
           createdAt: { $first: '$createdAt' },
           __v: { $first: '$__v' },
 
@@ -332,7 +340,14 @@ const findPost = async (usernames, limit, offset) => {
         as: 'comments.user',
       },
     },
-
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'username',
+        foreignField: 'username',
+        as: 'user',
+      },
+    },
     // Group the documents back by _id and push the comments array with the joined user documents
     {
       $group: {
@@ -341,7 +356,7 @@ const findPost = async (usernames, limit, offset) => {
         username: { $first: '$username' },
         picture: { $first: '$picture' },
         desc: { $first: '$desc' },
-        profilepic: { $first: '$profilepic' },
+        profilepic: { $first: '$user.profilepic' },
         createdAt: { $first: '$createdAt' },
         __v: { $first: '$__v' },
         score: { $first: '$score' },

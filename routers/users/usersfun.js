@@ -57,9 +57,35 @@ module.exports.suggestuser = async (req, res) => {
     ]);
     let following = followingUsers[0].following.map((user) => user.username);
     following.push(username);
-    const suggestUser = await User.find({
-      username: { $nin: following },
-    }).limit(6);
+    const suggestUser = await User.aggregate([
+      {
+        $match: {
+          username: { $nin: following },
+        },
+      },
+      {
+        $addFields: {
+          score: {
+            $sum: [
+              {
+                $cond: [{ $ne: ['$profilepic', ''] }, 10, 0],
+              },
+              {
+                $cond: [{ $ne: ['$bio', ''] }, 1, 0],
+              },
+            ],
+          },
+        },
+      },
+      {
+        $sort: {
+          score: -1,
+        },
+      },
+      {
+        $limit: 6,
+      },
+    ]);
     res.send(suggestUser);
   } catch (err) {
     console.log(err);
