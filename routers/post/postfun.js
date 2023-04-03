@@ -152,7 +152,6 @@ module.exports.getposts = async (req, res) => {
         $limit: parseInt(limit),
       },
     ]);
-    console.log(posts.length);
     if (posts) {
       res.send(posts);
     } else {
