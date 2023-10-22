@@ -1,9 +1,10 @@
-const Post = require('../../Model/PostModel');
-const User = require('../../Model/userModel');
-const Items_Model = require('../../Model/itemModel');
-const firebase = require('../firebase/firebase.js');
-const axios = require('axios');
-const { getScore, getPostScore } = require('../../Utils');
+const Post = require("../../Model/PostModel");
+const User = require("../../Model/userModel");
+const Items_Model = require("../../Model/itemModel");
+const firebase = require("../firebase/firebase.js");
+const axios = require("axios");
+const { getScore, getPostScore } = require("../../Utils");
+const mongoose = require("mongoose");
 
 const getImageToken = async (originalname) => {
   try {
@@ -19,7 +20,7 @@ const getImageToken = async (originalname) => {
 };
 module.exports.uploadpost = async (req, res) => {
   if (!req.file) {
-    return res.status(400).send('Error: No files found');
+    return res.status(400).send("Error: No files found");
   } else {
     const blob = firebase.bucket.file(req.file.originalname);
 
@@ -28,11 +29,11 @@ module.exports.uploadpost = async (req, res) => {
         contentType: req.file.mimetype,
       },
     });
-    blobWriter.on('error', (err) => {
+    blobWriter.on("error", (err) => {
       console.log(err);
     });
 
-    blobWriter.on('finish', async () => {
+    blobWriter.on("finish", async () => {
       const token = await getImageToken(req.file.originalname);
 
       const { username, desc } = req.query;
@@ -46,7 +47,7 @@ module.exports.uploadpost = async (req, res) => {
         res.send(post);
       } catch (err) {
         console.log(err);
-        res.send({ err: 'error occured in the server' });
+        res.send({ err: "error occured in the server" });
       }
     });
 
@@ -81,7 +82,7 @@ module.exports.getpost = async (req, res) => {
 
       res.send(posts);
     } else {
-      res.send({ message: 'no id found' });
+      res.send({ message: "no id found" });
     }
   } catch (err) {
     console.log(err);
@@ -101,7 +102,7 @@ module.exports.getposts = async (req, res) => {
       // Unwind the comments array so that each comment is its own document
       {
         $unwind: {
-          path: '$comments',
+          path: "$comments",
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -109,37 +110,37 @@ module.exports.getposts = async (req, res) => {
 
       {
         $lookup: {
-          from: 'users',
-          localField: 'comments.username',
-          foreignField: 'username',
-          as: 'comments.user',
+          from: "users",
+          localField: "comments.username",
+          foreignField: "username",
+          as: "comments.user",
         },
       },
       {
         $lookup: {
-          from: 'users',
-          localField: 'username',
-          foreignField: 'username',
-          as: 'user',
+          from: "users",
+          localField: "username",
+          foreignField: "username",
+          as: "user",
         },
       },
       // Group the documents back by _id and push the comments array with the joined user documents
       {
         $group: {
-          _id: '$_id',
-          likes: { $first: '$likes' },
-          username: { $first: '$username' },
-          picture: { $first: '$picture' },
-          desc: { $first: '$desc' },
-          profilepic: { $first: '$user.profilepic' },
-          createdAt: { $first: '$createdAt' },
-          __v: { $first: '$__v' },
+          _id: "$_id",
+          likes: { $first: "$likes" },
+          username: { $first: "$username" },
+          picture: { $first: "$picture" },
+          desc: { $first: "$desc" },
+          profilepic: { $first: "$user.profilepic" },
+          createdAt: { $first: "$createdAt" },
+          __v: { $first: "$__v" },
 
           comments: {
             $push: {
               $mergeObjects: [
-                '$comments',
-                { user: { $arrayElemAt: ['$comments.user', 0] } },
+                "$comments",
+                { user: { $arrayElemAt: ["$comments.user", 0] } },
               ],
             },
           },
@@ -163,7 +164,7 @@ module.exports.getposts = async (req, res) => {
     if (posts) {
       res.send(posts);
     } else {
-      res.status(404).send({ message: 'no posts found' });
+      res.status(404).send({ message: "no posts found" });
     }
   } catch (err) {
     console.log(err);
@@ -193,7 +194,7 @@ module.exports.updatelikes = async (req, res) => {
       await post.save();
       res.send(post);
     } else {
-      res.send('post not found');
+      res.send("post not found");
     }
   } catch (err) {
     console.log(err);
@@ -241,7 +242,7 @@ module.exports.addcomments = async (req, res) => {
       await post.save();
       res.send(post);
     } else {
-      res.status(404).send({ Error: 'Post Not Found' });
+      res.status(404).send({ Error: "Post Not Found" });
     }
   } catch (err) {
     console.log(err);
@@ -276,7 +277,7 @@ const findPost = async (usernames, limit, offset) => {
                 {
                   $divide: [
                     {
-                      $subtract: [new Date(), '$createdAt'],
+                      $subtract: [new Date(), "$createdAt"],
                     },
                     1000 * 60 * 60,
                   ],
@@ -289,12 +290,12 @@ const findPost = async (usernames, limit, offset) => {
               $multiply: [
                 {
                   $add: [
-                    { $multiply: [{ $size: '$comments' }, 3] },
+                    { $multiply: [{ $size: "$comments" }, 3] },
                     {
                       $multiply: [
                         {
                           $cond: {
-                            if: { $eq: ['$profilepic', ''] },
+                            if: { $eq: ["$profilepic", ""] },
                             then: 0,
                             else: 1,
                           },
@@ -302,7 +303,7 @@ const findPost = async (usernames, limit, offset) => {
                         5,
                       ],
                     },
-                    { $multiply: [{ $size: '$likes' }, 2] },
+                    { $multiply: [{ $size: "$likes" }, 2] },
                   ],
                 },
                 {
@@ -311,7 +312,7 @@ const findPost = async (usernames, limit, offset) => {
                     {
                       $divide: [
                         {
-                          $subtract: [new Date(), '$createdAt'],
+                          $subtract: [new Date(), "$createdAt"],
                         },
                         1000 * 60 * 60,
                       ],
@@ -327,45 +328,45 @@ const findPost = async (usernames, limit, offset) => {
     // Unwind the comments array so that each comment is its own document
     {
       $unwind: {
-        path: '$comments',
+        path: "$comments",
         preserveNullAndEmptyArrays: true,
       },
     },
     // Join the users collection with the posts collection to get the user data for the comments
     {
       $lookup: {
-        from: 'users',
-        localField: 'comments.username',
-        foreignField: 'username',
-        as: 'comments.user',
+        from: "users",
+        localField: "comments.username",
+        foreignField: "username",
+        as: "comments.user",
       },
     },
     {
       $lookup: {
-        from: 'users',
-        localField: 'username',
-        foreignField: 'username',
-        as: 'user',
+        from: "users",
+        localField: "username",
+        foreignField: "username",
+        as: "user",
       },
     },
     // Group the documents back by _id and push the comments array with the joined user documents
     {
       $group: {
-        _id: '$_id',
-        likes: { $first: '$likes' },
-        username: { $first: '$username' },
-        picture: { $first: '$picture' },
-        desc: { $first: '$desc' },
-        profilepic: { $first: '$user.profilepic' },
-        createdAt: { $first: '$createdAt' },
-        __v: { $first: '$__v' },
-        score: { $first: '$score' },
+        _id: "$_id",
+        likes: { $first: "$likes" },
+        username: { $first: "$username" },
+        picture: { $first: "$picture" },
+        desc: { $first: "$desc" },
+        profilepic: { $first: "$user.profilepic" },
+        createdAt: { $first: "$createdAt" },
+        __v: { $first: "$__v" },
+        score: { $first: "$score" },
 
         comments: {
           $push: {
             $mergeObjects: [
-              '$comments',
-              { user: { $arrayElemAt: ['$comments.user', 0] } },
+              "$comments",
+              { user: { $arrayElemAt: ["$comments.user", 0] } },
             ],
           },
         },
@@ -401,5 +402,51 @@ module.exports.allposts = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send(err);
+  }
+};
+
+module.exports.getcomments = async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const commentsWithUser = await Post.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(postId),
+        },
+      },
+      {
+        $unwind: "$comments", // Unwind the comments array
+      },
+      {
+        $sort: {
+          createdAt: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // The name of the users collection
+          localField: "comments.username", // Field in the comments referencing the user
+          foreignField: "username", // Field in the users collection
+          as: "USERS",
+        },
+      },
+      {
+        $unwind: "$USERS", // Unwind the user array
+      },
+      {
+        $project: {
+          _id: 0,
+          comment: "$comments",
+          username: "$USERS.username",
+          cuProfilepic: "$USERS.profilepic",
+        },
+      },
+    ]);
+
+    res.send(commentsWithUser);
+  } catch (error) {
+    console.error("Error fetching post:", error);
+
+    res.send(error);
   }
 };
